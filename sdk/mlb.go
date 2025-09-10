@@ -2,10 +2,22 @@ package sdk
 
 import (
 	"log"
+	"log/slog"
 	"strconv"
+	"time"
 
 	"github.com/gopherlibs/big-league-stats/api"
 )
+
+type Game struct {
+	Date time.Time
+	Away *team
+	Home *team
+}
+
+type Schedule struct {
+	Games []Game
+}
 
 type MLBLeague struct {
 	*basicConference
@@ -32,6 +44,40 @@ func NewMLBLeague(id uint8, name, nameShort, slug string, west *Division, centra
 	l.add(east)
 
 	return l
+}
+
+func GetSchedule(teamID, daysBefore, daysAfter uint8) Schedule {
+
+	c := api.New()
+
+	rawSched, err := c.Schedule(teamID, daysBefore, daysAfter)
+	if err != nil {
+		slog.Error("GetSchedule failed.", "err", err)
+		log.Fatal("Request failed")
+	}
+
+	var sched Schedule
+
+	// for each day
+	for _, d := range rawSched.Dates {
+
+		// for each game on the day
+		for _, g := range d.Games {
+
+			gameDate, err := time.Parse("2006-01-02", d.Date)
+			if err != nil {
+				slog.Error("Failed to parse date in schedule.", "date", d.Date)
+			}
+
+			sched.Games = append(sched.Games, Game{
+				Date: gameDate,
+				Away: TeamByID(g.Teams.Away.Team.ID),
+				Home: TeamByID(g.Teams.Home.Team.ID),
+			})
+		}
+	}
+
+	return sched
 }
 
 func (ml *MLBLeague) Standings() {
