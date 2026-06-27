@@ -28,7 +28,8 @@ func (c *client) get(url *url.URL) (*http.Response, error) {
 	return c.httpClient.Do(req)
 }
 
-// Returns a new client, a most to use this package.
+/* New returns a new MLB API client.
+ */
 func New() *client {
 
 	baseURL, err := url.Parse("https://statsapi.mlb.com")
