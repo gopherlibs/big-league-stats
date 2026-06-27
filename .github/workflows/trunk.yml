@@ -1,0 +1,42 @@
+name: "Trunk WF"
+
+on:
+  push:
+    branches:
+    - trunk
+
+jobs:
+  # Only running this job on trunk because we need the coverage info
+  unit-tests:
+    runs-on: ubuntu-24.04
+    env:
+      TEST_RESULTS: /tmp/test-results
+    steps:
+    - uses: actions/checkout@v7.0.0
+    - uses: actions/setup-go@v6.5.0
+      with:
+        go-version-file: 'go.mod'
+    - name: "Install Deps"
+      run: |
+        go version
+        go install github.com/magefile/mage@v1.17.2
+        mage -init
+        mage --version
+        go install gotest.tools/gotestsum@latest
+        gotestsum --version
+    - run: mage -v test
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v6
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+  build-snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v7.0.0
+    - uses: actions/setup-go@v6.5.0
+      with:
+        go-version-file: 'go.mod'
+    - uses: goreleaser/goreleaser-action@v7.2.2
+      with:
+        version: '2.16.0'
+        args: "release --snapshot"

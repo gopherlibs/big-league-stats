@@ -1,0 +1,13 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - govet
+    - staticcheck
+  settings:
+    staticcheck:
+      checks:
+        - all
+        - "-ST1005"
+        - "-SA1029" # revisit in the future

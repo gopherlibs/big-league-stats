@@ -1,0 +1,51 @@
+# Intended to run on every commit, on any branch, except trunk.
+name: "Main WF"
+
+on:
+  push:
+    branches-ignore:
+    - trunk
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-24.04
+    env:
+      TEST_RESULTS: /tmp/test-results
+    steps:
+    - uses: actions/checkout@v7.0.0
+    - uses: actions/setup-go@v6.5.0
+      with:
+        go-version-file: 'go.mod'
+    - name: "Install Deps"
+      run: |
+        go version
+        go install github.com/magefile/mage@v1.17.2
+        mage --version
+        go install gotest.tools/gotestsum@latest
+        gotestsum --version
+    - run: mage -v test
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v7
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+  linting:
+    name: lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.0
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9.2.1
+        with:
+          version: "v2.12.2"
+          args: ./... --timeout=10m
+  build-snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v7.0.0
+    - uses: actions/setup-go@v6.5.0
+      with:
+        go-version-file: 'go.mod'
+    - uses: goreleaser/goreleaser-action@v7.2.2
+      with:
+        version: '2.16.0'
+        args: "release --snapshot"
