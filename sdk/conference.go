@@ -1,7 +1,6 @@
 package sdk
 
-/*
- * conference is the major subdivision of a league. For some reason MLB will
+/* Conference is the major subdivision of a league. For some reason MLB will
  * confusingly refer to this as a league.
  */
 type Conference interface {

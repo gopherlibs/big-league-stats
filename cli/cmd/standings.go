@@ -22,7 +22,7 @@ var standingsCmd = &cobra.Command{
 		case "nl", "national":
 			c = sdk.MLB.NationalLeague
 		default:
-			return fmt.Errorf("Failed to understand MLB league passed.")
+			return fmt.Errorf("Failed to understand MLB league passed")
 		}
 
 		c.Standings()
@@ -37,7 +37,7 @@ var standingsCmd = &cobra.Command{
 		case "east":
 			d = c.East
 		default:
-			return fmt.Errorf("Failed to understand MLB division passed.")
+			return fmt.Errorf("Failed to understand MLB division passed")
 		}
 
 		fmt.Printf(" %s %s      |  W  |  L  |  W%%  |  GB  \n", c.NameShort, d.Name)
