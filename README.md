@@ -1,4 +1,4 @@
-# GopherLibs => Big League Stats [![Go Reference](https://pkg.go.dev/badge/github.com/gopherlibs/big-league-stats.svg)](https://pkg.go.dev/github.com/gopherlibs/big-league-stats) [![Go Report Card](https://goreportcard.com/badge/github.com/gopherlibs/big-league-stats)](https://goreportcard.com/report/github.com/gopherlibs/big-league-stats) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/gopherlibs/big-league/trunk/LICENSE)
+# GopherLibs => Big League Stats [![Go Reference](https://pkg.go.dev/badge/github.com/gopherlibs/big-league-stats.svg)](https://pkg.go.dev/github.com/gopherlibs/big-league-stats) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/gopherlibs/big-league/trunk/LICENSE)
 
 *This project is really early and figuring out its identity. Don't expect a stable (Go) API at the moment.*
 
@@ -20,12 +20,15 @@ If you want more functionality and a full blown TUI, you can give [mlbt](https:/
 
 ## Goals
 
-- The first and only goal right now is to get this module usable to return the current MLB standings. This will then be used in the [wtfutil/wtf](https://github.com/wtfutil/wtf) project as a widget/module.
+- The first right now is to get this module usable to return the current MLB standings. This will then be used in the [wtfutil/wtf](https://github.com/wtfutil/wtf) project as a widget/module.
+- Keep improving MLB data
+- add the first NFL data, again, standings
 
 
 ## Requirements
 
-The minimum Go version supported is v1.24.x.
+- The minimum Go version supported is v1.25.x.
+- Internet, access is needed to pull data via APIs.
 
 
 ## Usage
@@ -34,11 +37,11 @@ The minimum Go version supported is v1.24.x.
 
 ```go
 import(
-	"github.com/gopherlibs/big-league-stats/mlb"
+	"github.com/gopherlibs/big-league-stats/sdk"
 )
 ```
 
-Alternatively, you can run `go get github.com/gopherlibs/big-league-stats/mlb` in your project directory.
+Alternatively, you can run `go get github.com/gopherlibs/big-league-stats` in your project directory.
 
 
 ## Usage
@@ -49,30 +52,27 @@ package main
 import (
 	"fmt"
 
-	"github.com/gopherlibs/big-league-stats/mlb"
+	"github.com/gopherlibs/big-league-stats/sdk"
 )
 
 func main() {
 
-	img, err := gpic.NewImage("Ricardo@Feliciano.Tech")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// choose a top league
+	conference := sdk.MLB.NationalLeague
 
-	imgURL, err := img.URL()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// pull standings data
+	c.Standings()
 
-	fmt.Println(imgURL.String())
+	// look through a divison's teams to see data
+	for _, t := conference.East.Teams(){
+		fmt.Println( t.Name )
+	}
 }
 ```
 
 ## Development
 
-This library is written and tested with Go v1.24+ in mind.
+This library is written and tested with Go v1.25+ in mind.
 `go fmt` is your friend.
 Please feel free to open Issues and PRs are you see fit.
 Any PR that requires a good amount of work or is a significant change, it would be best to open an Issue to discuss the change first.
