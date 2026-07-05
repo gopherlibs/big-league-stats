@@ -80,6 +80,9 @@ func GetSchedule(teamID, daysBefore, daysAfter uint8) Schedule {
 	return sched
 }
 
+/* Standings makes an API call to pull standings data for an MLB
+ * league.
+ */
 func (ml *MLBLeague) Standings() {
 
 	c := api.New()
