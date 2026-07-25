@@ -12,7 +12,7 @@ jobs:
     env:
       TEST_RESULTS: /tmp/test-results
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
     - uses: actions/setup-go@v6.5.0
       with:
         go-version-file: 'go.mod'
@@ -32,7 +32,7 @@ jobs:
     name: lint
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7.0.0
+      - uses: actions/checkout@v7.0.1
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9.3.0
         with:
@@ -41,7 +41,7 @@ jobs:
   build-snapshot:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v7.0.0
+    - uses: actions/checkout@v7.0.1
     - uses: actions/setup-go@v6.5.0
       with:
         go-version-file: 'go.mod'
